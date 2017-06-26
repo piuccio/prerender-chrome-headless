@@ -26,7 +26,7 @@ module.exports = function (source, chromeFlags) {
       () => chrome.kill()
     );
   })
-  .then((results) => results.find(r => r.extractedHTML).extractedHTML);
+  .then((results) => results.find(r => r && r.extractedHTML).extractedHTML);
 }
 
 function extractHtml(evaluatedCode) {
@@ -34,12 +34,12 @@ function extractHtml(evaluatedCode) {
 }
 
 function launchChrome(url, flags) {
-  debug('Launching Chrome headless');
+  debug('Launching Chrome headless for url "%s"', url);
   const chromeFlags = [
     '--disable-gpu',
     '--headless',
-  ].concat(flags);
-  debug('Chrome flags: %s', chromeFlags.join(' '));
+  ].concat(flags).filter(Boolean);
+  debug('Chrome flags: %s', chromeFlags);
 
   return chromeLauncher.launch({
     startingUrl: url,

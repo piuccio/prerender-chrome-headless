@@ -17,7 +17,8 @@
   },
   "scripts": {
     "lint": "eslint index.js",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "DEBUG=prerender jest --watchAll"
   },
   "dependencies": {
     "chrome-launcher": "^0.2.1",
