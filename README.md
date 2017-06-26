@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/en-japan-air/prerender-chrome-headless.svg?branch=master)](https://travis-ci.org/en-japan-air/prerender-chrome-headless)
+
 # Generate static pages from single page applications
 
 Few tool out there allow you to pre-render web applications to static pages either using webpack or fake browser.
