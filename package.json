@@ -1,6 +1,6 @@
 {
   "name": "prerender-chrome-headless",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Pre-render single page applications to static HTML file",
   "keywords": [
     "pre-render",
