@@ -17,19 +17,20 @@
   },
   "scripts": {
     "lint": "eslint index.js",
-    "test": "jest",
-    "test:watch": "DEBUG=prerender jest --watchAll"
+    "test": "DEBUG=prerender jest",
+    "test:watch": "DEBUG=prerender jest --watchAll",
+    "posttest": "npm run lint"
   },
   "dependencies": {
     "chrome-launcher": "^0.3.1",
-    "chrome-remote-interface": "^0.24.0",
+    "chrome-remote-interface": "^0.24.3",
     "debug": "^2.6.8"
   },
   "engines": {
-    "node": ">=4.0"
+    "node": ">=6.0"
   },
   "devDependencies": {
-    "eslint": "^4.1.1",
+    "eslint": "^4.3.0",
     "jest": "^20.0.4"
   }
 }

@@ -23,6 +23,23 @@ By default this package runs chrome with `--disable-gpu` and `--headless` you ca
 render(url, ['--disable-http2'])
 ```
 
+### Options
+
+```js
+render(url, {
+  delayLaunch: 0, // milliseconds
+  delayPageLoad: 0, // milliseconds
+  chromeFlags: [], // list of flags
+});
+```
+
+The second parameter of `render` function can either be an array of chrome flags or an object with
+
+* `delayLaunch` Wait to launch Chrome browser, in case you need more time to set up the server
+* `delayPageLoad` Wait after the page load event for your JS to run
+* `chromeFlags` List of chrome flags
+
+
 ## Continuous integration
 
 The package works on any machine with Chrome installed. Most CI environments allows you to install external packages.
@@ -44,7 +61,7 @@ before_install:
   # Needed by `chrome-launcher`
   - export LIGHTHOUSE_CHROMIUM_PATH=google-chrome-stable
 
-install:
+script:
   # Run your build script that fetches a page and writes the output
   - node generate_static_page.js
 ```
