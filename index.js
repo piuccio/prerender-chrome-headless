@@ -1,87 +1,63 @@
-const chromeLauncher = require('chrome-launcher');
-const chromeInterface = require('chrome-remote-interface');
 const debug = require('debug')('prerender');
+
+const puppeteer = require('puppeteer');
 
 module.exports = function (source, options = {}) {
   debug('Calling prerender function for page %s', source);
-  const chromeFlags = options.length ? options : options.chromeFlags;
+  const chromeFlags = (options.length ? options : options.chromeFlags) || [];
   const delayLaunch = options.delayLaunch || 0;
   const delayPageLoad = options.delayPageLoad || 0;
+  const puppeteerArgs = { args: chromeFlags };
 
   debug(`Launching chrome in ${delayLaunch}ms`);
   return wait(delayLaunch).then(() =>
   chain(
-    () => launchChrome(source, chromeFlags),
-    connectDebuggingInterface
+    'puppeteer.launch',
+    () => puppeteer.launch(puppeteerArgs),
+
+    'browser.newPage',
+    (browser) => browser.newPage(),
+
+    `page.goto('${source}')`,
+    (page) => page.goto(source)
   )
-  .then(([chrome, client]) => {
-    const { Page, Runtime } = client;
-    return chain(
-      () => debug('Enabling Page remote interface'),
-      () => Page.enable(),
+  .then(([browser, page]) => chain(
+    `Waiting ${delayPageLoad}ms after page load event`,
+    () => page.waitFor(delayPageLoad),
 
-      () => debug('Waiting for page load event to be fired'),
-      () => Page.loadEventFired(),
-      () => debug(`Waiting ${delayPageLoad}ms after page load event`),
-      () => wait(delayPageLoad),
+    'Extracting HTML from the page',
+    () => page.content(),
 
-      () => debug('Extracting HTML from the page'),
-      () => Runtime.evaluate(expression(getHTML)),
+    (result) => extractHtml(result),
 
-      (result) => extractHtml(result),
-
-      () => debug('Closing the debugging interface client'),
-      () => client.close(),
-      () => debug('Terminating Chrome'),
-      () => chrome.kill()
-    );
-  })
+    'Terminating Chrome',
+    () => browser.close()
+  ))
   .then(
     (results) => results.find(r => r && r.extractedHTML).extractedHTML
   ));
 }
 
-function extractHtml(evaluatedCode) {
+function extractHtml(result) {
   debug('Got result from runtime');
-  return { extractedHTML: `<!doctype html>${evaluatedCode.result.value}` };
-}
-
-function launchChrome(url, flags) {
-  debug('Launching Chrome headless for url "%s"', url);
-  const chromeFlags = [
-    '--disable-gpu',
-    '--headless',
-  ].concat(flags).filter(Boolean);
-  debug('Chrome flags: %s', chromeFlags);
-
-  return chromeLauncher.launch({
-    startingUrl: url,
-    chromeFlags,
-  });
-}
-
-function connectDebuggingInterface(chrome) {
-  debug('Connecting debugging interface on port %s', chrome.port);
-  return chromeInterface({ port: chrome.port });
-}
-
-function getHTML() {
-  /* eslint-env browser */
-  return document.documentElement.outerHTML;
-}
-
-function expression(code) {
-  return { expression: `(${code})()` };
+  return { extractedHTML: result };
 }
 
 function chain(...actions) {
   const results = [];
-  return actions.reduce((promise, fn, index) => {
+  let didCallAFunction = false;
+  return actions.reduce((promise, fnOrString) => {
     return promise.then((previous) => {
-      if (index > 0) {
-        results[index - 1] = previous;
+      if (typeof fnOrString === 'function') {
+        if (didCallAFunction) {
+          results.push(previous);
+        }
+        didCallAFunction = true;
+        return fnOrString(previous);
+      } else {
+        debug(fnOrString);
+        return previous;
       }
-      return fn(previous);
     });
   }, Promise.resolve())
   .then((last) => {

@@ -1,8 +1,12 @@
+[![Build Status](https://travis-ci.org/en-japan-air/prerender-chrome-headless.svg?branch=master)](https://travis-ci.org/en-japan-air/prerender-chrome-headless)
+
 # Generate static pages from single page applications
 
 Few tool out there allow you to pre-render web applications to static pages either using webpack or fake browser.
 
 This package uses [headless chrome](https://developers.google.com/web/updates/2017/04/headless-chrome) for a more accurate pre-rendering in an actual browser.
+
+As of version `2.0.0` this package internally uses [puppeteer](https://github.com/GoogleChrome/puppeteer).
 
 ## Usage
 
