@@ -18,6 +18,9 @@ module.exports = function (source, options = {}) {
     'browser.newPage',
     (browser) => browser.newPage(),
 
+    `adding console listeners`,
+    (page) => page.on('pageerror', options.onPageError || noop) || page,
+
     `page.goto('${source}')`,
     (page) => page.goto(source)
   )
@@ -72,3 +75,5 @@ function wait(time) {
   }
   return Promise.resolve();
 }
+
+function noop () {}

@@ -34,6 +34,7 @@ render(url, {
   delayLaunch: 0, // milliseconds
   delayPageLoad: 0, // milliseconds
   chromeFlags: [], // list of flags
+  onPageError() {} // callback
 });
 ```
 
@@ -42,6 +43,7 @@ The second parameter of `render` function can either be an array of chrome flags
 * `delayLaunch` Wait to launch Chrome browser, in case you need more time to set up the server
 * `delayPageLoad` Wait after the page load event for your JS to run
 * `chromeFlags` List of chrome flags
+* `onPageError` Function called when an uncaught exception happens within the page. You can use this function for instance to fail your build if error happens during the generation of the page
 
 
 ## Continuous integration
