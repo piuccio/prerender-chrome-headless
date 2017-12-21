@@ -6,6 +6,8 @@ Few tool out there allow you to pre-render web applications to static pages eith
 
 This package uses [headless chrome](https://developers.google.com/web/updates/2017/04/headless-chrome) for a more accurate pre-rendering in an actual browser.
 
+As of version `2.0.0` this package internally uses [puppeteer](https://github.com/GoogleChrome/puppeteer).
+
 ## Usage
 
 ```js
