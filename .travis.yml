@@ -1,12 +1,9 @@
-dist: trusty
-sudo: false
-
 language: node_js
 
 node_js:
   - 6
-  - 7
   - 8
+  - 10
 
 addons:
   chrome: stable
@@ -14,6 +11,4 @@ addons:
 before_install:
   - export LIGHTHOUSE_CHROMIUM_PATH=google-chrome-stable
 
-cache:
-  directories:
-    - "node_modules"
+cache: npm
