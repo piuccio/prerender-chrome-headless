@@ -7,13 +7,14 @@ module.exports = function (source, options = {}) {
   const chromeFlags = (options.length ? options : options.chromeFlags) || [];
   const delayLaunch = options.delayLaunch || 0;
   const delayPageLoad = options.delayPageLoad || 0;
-  const puppeteerArgs = { args: chromeFlags };
+  const puppeteerOptions = options.puppeteerOptions || {};
+  puppeteerOptions.args = chromeFlags;
 
   debug(`Launching chrome in ${delayLaunch}ms`);
   return wait(delayLaunch).then(() =>
   chain(
     'puppeteer.launch',
-    () => puppeteer.launch(puppeteerArgs),
+    () => puppeteer.launch(puppeteerOptions),
 
     'browser.newPage',
     (browser) => browser.newPage(),
