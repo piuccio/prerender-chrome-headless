@@ -8,7 +8,9 @@ module.exports = function (source, options = {}) {
   const delayLaunch = options.delayLaunch || 0;
   const delayPageLoad = options.delayPageLoad || 0;
   const puppeteerOptions = options.puppeteerOptions || {};
-  puppeteerOptions.args = chromeFlags;
+  if (chromeFlags.length) {
+      puppeteerOptions.args = chromeFlags;
+  }
 
   debug(`Launching chrome in ${delayLaunch}ms`);
   return wait(delayLaunch).then(() =>
