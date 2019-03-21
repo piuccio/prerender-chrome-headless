@@ -22,14 +22,14 @@
     "posttest": "npm run lint"
   },
   "dependencies": {
-    "debug": "^4.1.0",
-    "puppeteer": "^1.10.0"
+    "debug": "^4.1.1",
+    "puppeteer": "^1.13.0"
   },
   "engines": {
-    "node": ">=6.0"
+    "node": ">=8.0"
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
+    "eslint": "^5.15.3",
     "jest": "^24.5.0"
   }
 }
