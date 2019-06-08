@@ -23,13 +23,13 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
-    "puppeteer": "^1.13.0"
+    "puppeteer": "^1.17.0"
   },
   "engines": {
     "node": ">=8.0"
   },
   "devDependencies": {
-    "eslint": "^5.15.3",
-    "jest": "^24.5.0"
+    "eslint": "^5.16.0",
+    "jest": "^24.8.0"
   }
 }
